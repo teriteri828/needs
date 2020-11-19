@@ -11,7 +11,16 @@ from const import (
     TWEET_SEARCH_COUNT,
     TWEET_SINCE_DATE,
     TWEET_UNTIL_DATE,
+    AI_MODEL_FILE,
+    USE_URL,
 )
+
+import tensorflow_hub as hub
+import tensorflow_text
+import tensorflow as tf
+
+model = tf.keras.models.load_model(AI_MODEL_FILE)
+embed = hub.load(USE_URL)
 
 
 @dataclass
@@ -61,9 +70,12 @@ class NeedsTweetGet:
                 search_tweet_text = search_tweet_text.replace(delete_word, "")
 
             search_tweet_datetime = search_tweet.created_at
-            search_tweet_result.append(
-                TweetsDto(search_tweet_text, search_tweet_datetime)
-            )
+            text_vector = embed(search_tweet_text).numpy()
+            needs_bool = model.predict_classes(text_vector)[0]
+            if needs_bool == 1:
+                search_tweet_result.append(
+                    TweetsDto(search_tweet_text, search_tweet_datetime)
+                )
         return search_tweet_result
 
     def _remove_emoji(self, src_str):

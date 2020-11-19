@@ -22,3 +22,4 @@ needs_get/__pycache__/needs_get_dto.cpython-37.pyc
 needs_get/__pycache__/needs_get_entity.cpython-37.pyc
 needs_get/__pycache__/service_needs_get.cpython-37.pyc
 db.sqlite3
+needs_get/model/get_needs.h5
