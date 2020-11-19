@@ -24,3 +24,9 @@ needs_get/__pycache__/service_needs_get.cpython-37.pyc
 db.sqlite3
 needs_get/model/get_needs.h5
 needs_get/__pycache__/needs_get_repository.cpython-37.pyc
+needs/migrations/__pycache__/0003_auto_20201119_1351.cpython-37.pyc
+needs/migrations/0003_auto_20201119_1351.py
+needs/tests/__pycache__/__init__.cpython-37.pyc
+needs/tests/__pycache__/test_needs_repository.cpython-37.pyc
+needs/views/__pycache__/needs_dto.cpython-37.pyc
+needs/views/__pycache__/needs_repository.cpython-37.pyc
