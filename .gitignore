@@ -30,3 +30,9 @@ needs/tests/__pycache__/__init__.cpython-37.pyc
 needs/tests/__pycache__/test_needs_repository.cpython-37.pyc
 needs/views/__pycache__/needs_dto.cpython-37.pyc
 needs/views/__pycache__/needs_repository.cpython-37.pyc
+needs_get/__pycache__/needs_get_repository.cpython-37.pyc
+needs_get/__pycache__/needs_get_repository.cpython-37.pyc
+needs_get/needs_get_entity.pyc
+needs_get/__pycache__/needs_get_repository.cpython-37.pyc
+needs_get/cron_e.log
+needs_get/cron.log

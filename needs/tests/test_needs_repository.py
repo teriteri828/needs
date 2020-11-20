@@ -50,5 +50,5 @@ class TestNeedsRepository(TestCase):
             sentence="test2",
             date=datetime.datetime(2020, 2, 1, 12, 15, 30, 2000),
         )
-        expect = [ex1, ex2]
+        expect = [ex2, ex1]
         self.assertEqual(actual, expect)

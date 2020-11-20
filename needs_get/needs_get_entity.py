@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 from dataclasses import dataclass
 import tweepy
 import emoji

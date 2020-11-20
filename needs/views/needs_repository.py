@@ -5,7 +5,7 @@ from needs.views.needs_dto import NeedsEntity
 @dataclass
 class NeedsSelect:
     def all(self, models):
-        needs_data_list = models.objects.all()
+        needs_data_list = models.objects.all().order_by('-id')
         ret = []
         for needs in needs_data_list:
             ret.append(
