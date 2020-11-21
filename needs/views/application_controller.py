@@ -13,3 +13,13 @@ def all(request):
         "needs_list": needs_list,
     }
     return HttpResponse(template.render(context, request))
+
+
+def top(request):
+    needs_select = NeedsSelect()
+    needs_list = needs_select.top_limit(Needs)
+    template = loader.get_template("needs/needs_all_table.html")
+    context = {
+        "needs_list": needs_list,
+    }
+    return HttpResponse(template.render(context, request))
