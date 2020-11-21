@@ -38,7 +38,6 @@ class TestNeedsRepository(TestCase):
 
         target = NeedsSelect()
         actual = target.all(Needs)
-        print(actual)
 
         ex1 = NeedsEntity(
             nid=1,
@@ -51,4 +50,29 @@ class TestNeedsRepository(TestCase):
             date=datetime.datetime(2020, 2, 1, 12, 15, 30, 2000),
         )
         expect = [ex2, ex1]
+        self.assertEqual(actual, expect)
+
+    def test_DBに格納されているデータを100件抽出(self):
+        td_list = []
+        for i in range(101):
+            i = i + 1
+            td = Needs(
+                sentence="test",
+                date=datetime.datetime(2018 + i, 2, 1, 12, 15, 30, 2000),
+            )
+            td.save()
+            td_list.append(
+                NeedsEntity(
+                    nid=i,
+                    sentence="test",
+                    date=datetime.datetime(2018 + i, 2, 1, 12, 15, 30, 2000),
+                )
+            )
+
+        target = NeedsSelect()
+        actual = target.top_limit(Needs)
+        # 配列を反転
+        expect = td_list[::-1]
+
+        expect = expect[:100]
         self.assertEqual(actual, expect)
