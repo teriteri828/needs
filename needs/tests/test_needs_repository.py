@@ -26,12 +26,16 @@ class TestNeedsRepository(TestCase):
 
     def test_DBに格納されているデータを全件抽出(self):
         td1 = Needs(
-            id=1, sentence="test", date=datetime.datetime(2018, 2, 1, 12, 15, 30, 2000),
+            id=1,
+            sentence="test",
+            date=datetime.datetime(2018, 2, 1, 12, 15, 30, 2000),
+            label=None,
         )
         td2 = Needs(
             id=2,
             sentence="test2",
             date=datetime.datetime(2020, 2, 1, 12, 15, 30, 2000),
+            label=None,
         )
         td1.save()
         td2.save()
@@ -43,11 +47,13 @@ class TestNeedsRepository(TestCase):
             nid=1,
             sentence="test",
             date=datetime.datetime(2018, 2, 1, 12, 15, 30, 2000),
+            label=None,
         )
         ex2 = NeedsEntity(
             nid=2,
             sentence="test2",
             date=datetime.datetime(2020, 2, 1, 12, 15, 30, 2000),
+            label=None,
         )
         expect = [ex2, ex1]
         self.assertEqual(actual, expect)
@@ -57,15 +63,17 @@ class TestNeedsRepository(TestCase):
         for i in range(101):
             i = i + 1
             td = Needs(
-                sentence="test",
+                sentence="test" + str(i),
                 date=datetime.datetime(2018 + i, 2, 1, 12, 15, 30, 2000),
+                label=None,
             )
             td.save()
             td_list.append(
                 NeedsEntity(
                     nid=i,
-                    sentence="test",
+                    sentence="test" + str(i),
                     date=datetime.datetime(2018 + i, 2, 1, 12, 15, 30, 2000),
+                    label=None,
                 )
             )
 

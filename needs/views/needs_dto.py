@@ -7,3 +7,4 @@ class NeedsEntity:
     nid: int
     sentence: str
     date: datetime.datetime
+    label: int

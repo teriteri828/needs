@@ -166,3 +166,8 @@ static/admin/js/vendor/xregexp/LICENSE.txt
 static/admin/js/vendor/xregexp/xregexp.js
 static/admin/js/vendor/xregexp/xregexp.min.js
 static/admin/css/autocomplete.css
+needs/migrations/0004_auto_20201123_1220.py
+needs/migrations/0005_auto_20201123_1228.py
+needs/migrations/__pycache__/0004_auto_20201123_1208.cpython-37.pyc
+needs/migrations/__pycache__/0004_auto_20201123_1220.cpython-37.pyc
+needs/migrations/__pycache__/0005_auto_20201123_1228.cpython-37.pyc

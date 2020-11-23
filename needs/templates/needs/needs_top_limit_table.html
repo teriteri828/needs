@@ -12,32 +12,37 @@
 </head>
  
 <body>
-    {% if needs_list %}
-        <ul>
-            <table class="table">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">id</th>
-                        <th scope="col">sentence</th>
-                        <th scope="col">date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for needs in needs_list %}
+    <form action="{% url 'needs:data_file_save' %}" method="get">{% csrf_token %}
+        <input type="submit" value="learn">
+        {% if needs_list %}
+            <ul>
+                <table class="table">
+                    <thead class="thead-dark">
                         <tr>
-                            <th>{{ needs.nid }}</th>
-                            <th>{{ needs.sentence }}</th>
-                            <th>{{ needs.date }}</th>
+                            <th scope="col">id</th>
+                            <th scope="col">sentence</th>
+                            <th scope="col">date</th>
+                            <th scope="col">lable</th>
                         </tr>
-                    {% endfor %}
-                <tbody>
-            </table>
-        </ul>
-    {% else %}
-        <p>No polls are available.</p>
-    {% endif %}
+                    </thead>
+                    <tbody>
+                        {% for needs in needs_list %}
+                            <tr>
+                                <th name="nid">{{ needs.nid }}</th>
+                                <th>{{ needs.sentence }}</th>
+                                <th>{{ needs.date }}</th>
+                                <th name="label" >{{ needs.lable }}</th>
+                                <input type="hidden" name="nid_{{ needs.nid }}" value="{{ needs.label }}">
+                            </tr>
+                        {% endfor %}
+                    <tbody>
+                </table>
+            </ul>
+        {% else %}
+            <p>No polls are available.</p>
+        {% endif %}
 
- 
+    </form>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

@@ -13,6 +13,7 @@ class NeedsSelect:
                     nid=needs.id,
                     sentence=needs.sentence,
                     date=needs.date.replace(tzinfo=None),
+                    label=needs.label,
                 )
             )
         return ret
@@ -26,6 +27,7 @@ class NeedsSelect:
                     nid=needs.id,
                     sentence=needs.sentence,
                     date=needs.date.replace(tzinfo=None),
+                    label=needs.label,
                 )
             )
         return ret
