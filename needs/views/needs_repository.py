@@ -31,3 +31,17 @@ class NeedsSelect:
                 )
             )
         return ret
+
+    def learn_data_get(self, models):
+        needs_data_list = models.objects.all().order_by("-id")[:20]
+        ret = []
+        for needs in needs_data_list:
+            ret.append(
+                NeedsEntity(
+                    nid=needs.id,
+                    sentence=needs.sentence,
+                    date=needs.date.replace(tzinfo=None),
+                    label=needs.label,
+                )
+            )
+        return ret
