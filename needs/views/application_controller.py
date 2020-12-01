@@ -73,13 +73,13 @@ def data_file_save(request):
             label_list.append(needs.label)
             needs.save()
 
-    with open(LEARN_DATA_TEMP_FILE_PATH, "a") as f:
+    with open(LEARN_DATA_FILE_PATH, "a") as f:
         writer = csv.writer(f)
         for s, l in zip(sentence_list, label_list):
             writer.writerow([s, l])
 
     dataframe = pd.read_csv(
-        LEARN_DATA_TEMP_FILE_PATH, encoding="utf8", header=None, names=["text", "needs"]
+        LEARN_DATA_FILE_PATH, encoding="utf8", header=None, names=["text", "needs"]
     )
     dataframe = dataframe.drop_duplicates(subset="text", keep="last")
     dataframe.to_csv(LEARN_DATA_FILE_PATH, index=False)
