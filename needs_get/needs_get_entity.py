@@ -20,6 +20,7 @@ from const import (
 import tensorflow_hub as hub
 import tensorflow_text
 import tensorflow as tf
+import numpy as np
 
 model = tf.keras.models.load_model(AI_MODEL_FILE)
 embed = hub.load(USE_URL)
