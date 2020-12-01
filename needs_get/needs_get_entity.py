@@ -73,7 +73,7 @@ class NeedsTweetGet:
 
             search_tweet_datetime = search_tweet.created_at
             text_vector = embed(search_tweet_text).numpy()
-            needs_bool = model.predict_classes(text_vector)[0]
+            needs_bool = np.argmax(model.predict(text_vector), axis=-1)[0]
             if needs_bool == 1:
                 search_tweet_result.append(
                     TweetsDto(search_tweet_text, search_tweet_datetime)

@@ -173,3 +173,44 @@ needs/migrations/__pycache__/0004_auto_20201123_1220.cpython-37.pyc
 needs/migrations/__pycache__/0005_auto_20201123_1228.cpython-37.pyc
 needs_learn/learn_data/learn_data_temp_20201130.csv
 needs_learn/learn_data/learn_data.csv
+needs_get/__pycache__/needs_get_repository.cpython-37.pyc
+needs_get/model/get_needs_bk.h5
+needs_get/__pycache__/needs_get_repository.cpython-37.pyc
+needs_learn/cron_e.log
+needs_learn/cron.log
+needs_learn/__pycache__/const.cpython-37.pyc
+needs_learn/__pycache__/learn_data_collect.cpython-37.pyc
+needs_learn/__pycache__/learn_data_split.cpython-37.pyc
+needs_learn/__pycache__/learn.cpython-37.pyc
+needs_learn/__pycache__/service_learn.cpython-37.pyc
+needs_learn/learn_data/q__2020-11-01_2020-11-03.csv
+needs_learn/learn_data/q_なってほしい_2020-10-31.csv
+needs_learn/learn_data/q_なってほしい_2020-11-3.csv
+needs_learn/learn_data/q_パソコン なってほしい_2020-11-05.csv
+needs_learn/learn_data/q_ほしい_2020-11-01_2020-11-03.csv
+needs_learn/learn_data/q_もっと簡単にしてほしい_2020-11-05.csv
+needs_learn/learn_data/q_もっと簡単にしてほしい_2020-11-07.csv
+needs_learn/learn_data/q_もっと簡単にしてほしい_2020-11-08.csv
+needs_learn/learn_data/q_もっと簡単にしてほしい_2020-11-12.csv
+needs_learn/learn_data/q_もっと簡単にしてほしい_2020-11-15.csv
+needs_learn/learn_data/q_もっと分かりやすくしてほしい_2020-11-05.csv
+needs_learn/learn_data/q_もっと分かりやすくしてほしい_2020-11-12.csv
+needs_learn/learn_data/q_もっと分かりやすくしてほしい_2020-11-15.csv
+needs_learn/learn_data/q_改善してほしい_2020-11-07.csv
+needs_learn/learn_data/q_改善してほしい_2020-11-08.csv
+needs_learn/learn_data/q_改善してほしい_2020-11-11.csv
+needs_learn/learn_data/q_改善してほしい_2020-11-12.csv
+needs_learn/learn_data/q_改善してほしい_2020-11-14.csv
+needs_learn/learn_data/q_改善してほしい_2020-11-15.csv
+needs_learn/learn_data/q_改善してほしい_2020-11-20.csv
+needs_learn/learn_data/q_手間がかかる_2020-11-07.csv
+needs_learn/learn_data/q_分からない 困る_2020-11-08.csv
+needs_learn/learn_data/q_分からない 困る_2020-11-12.csv
+needs_learn/learn_data/q_分かりにくい_2020-11-06.csv
+needs_learn/learn_data/q_分かりにくい_2020-11-12.csv
+needs_learn/learn_data/q_分かりにくい_2020-11-14.csv
+needs_learn/learn_data/q_分かりにくい_2020-11-15.csv
+needs_learn/learn_data/q_面倒_2020-11-01_2020-11-03.csv
+needs_learn/learn_data/q_面倒くさい　作業_2020-11-06.csv
+needs_learn/learn_data/q_面倒くさい　作業_2020-11-12.csv
+needs_learn/learn_data/q_面倒くさい　作業_2020-11-15.csv
