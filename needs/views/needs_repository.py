@@ -33,7 +33,7 @@ class NeedsSelect:
         return ret
 
     def learn_data_get(self, models):
-        needs_data_list = models.objects.all().order_by("-id")[:20]
+        needs_data_list = models.objects.all().order_by("-id")[:30]
         ret = []
         for needs in needs_data_list:
             ret.append(

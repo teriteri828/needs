@@ -19,6 +19,6 @@ from needs_get_dto import TweetsDto
 class DataInsert:
     def execute(self, needs_list: List[TweetsDto]):
         for needs in needs_list:
-            n = Needs(sentence=needs.text, date=needs.datetime_jst)
+            n = Needs(sentence=needs.text, date=needs.datetime_jst, label=needs.label)
             n.save()
         return True

@@ -75,11 +75,10 @@ class NeedsTweetGet:
             search_tweet_datetime = search_tweet.created_at
             text_vector = embed(search_tweet_text).numpy()
             needs_bool = np.argmax(model.predict(text_vector), axis=-1)[0]
-            if needs_bool == 1:
-                print("search_word: {}, sentence: {}".format(TWEET_SEARCH_WORD, search_tweet_text))
-                search_tweet_result.append(
-                    TweetsDto(search_tweet_text, search_tweet_datetime)
-                )
+            print("search_word: {}, sentence: {}".format(TWEET_SEARCH_WORD, search_tweet_text))
+            search_tweet_result.append(
+                TweetsDto(search_tweet_text, search_tweet_datetime, needs_bool)
+            )
         return search_tweet_result
 
     def _remove_emoji(self, src_str):
