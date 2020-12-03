@@ -19,7 +19,7 @@ class NeedsSelect:
         return ret
 
     def top_limit(self, models):
-        needs_data_list = models.objects.all().order_by("-id")[:100]
+        needs_data_list = models.objects.filter(label=1).order_by("-id")[:100]
         ret = []
         for needs in needs_data_list:
             ret.append(
