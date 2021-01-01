@@ -1,5 +1,8 @@
 from django.http import HttpResponse
 from django.template import loader
+from gensim import corpora, models
+import numpy as np
+
 from needs.models import Needs
 from needs.views.needs_repository import NeedsSelect
 from needs.views.needs_dto import NeedsEntity
@@ -9,9 +12,20 @@ import csv
 import pandas as pd
 import datetime
 
-LEARN_DATA_TEMP_FILE_PATH = (
-    os.path.dirname(os.path.abspath(__file__))
-    + "/../../needs_learn/learn_data/learn_data_temp_{}.csv".format(datetime.datetime.now().strftime('%Y%m%d'))
+import io
+import matplotlib
+
+import MeCab
+
+# バックエンドを指定
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import base64
+
+LEARN_DATA_TEMP_FILE_PATH = os.path.dirname(
+    os.path.abspath(__file__)
+) + "/../../needs_learn/learn_data/learn_data_temp_{}.csv".format(
+    datetime.datetime.now().strftime("%Y%m%d")
 )
 LEARN_DATA_FILE_PATH = (
     os.path.dirname(os.path.abspath(__file__))
@@ -83,4 +97,101 @@ def data_file_save(request):
     )
     dataframe = dataframe.drop_duplicates(subset="text", keep="last")
     dataframe.to_csv(LEARN_DATA_FILE_PATH, index=False)
-    return HttpResponse('<input type="button" value="Back" onClick="javascript:history.go(-1);">')
+    return HttpResponse(
+        '<input type="button" value="Back" onClick="javascript:history.go(-1);">'
+    )
+
+
+"""
+ldaの分類数を調べる用の処理
+"""
+
+def topic_words_create(text):
+    mecab = MeCab.Tagger("")
+
+    mecab.parse("")  # 文字列がGCされるのを防ぐ
+    node = mecab.parseToNode(text)
+    topic_word = []
+    while node:
+        # 単語を取得
+        word = node.surface
+        # 品詞を取得
+        pos = node.feature.split(",")[0]
+        if pos in ["名詞"]:
+            topic_word.append(word)
+        # 次の単語に進める
+        node = node.next
+    return topic_word
+
+
+# グラフ作成
+def create_graph(start, limit, step, perplexity_vals, coherence_vals):
+    plt.cla()  # グラフをリセット
+    x = range(start, limit, step)
+
+    fig, ax1 = plt.subplots(figsize=(12,5))
+
+    # coherence
+    c1 = 'darkturquoise'
+    ax1.plot(x, coherence_vals, 'o-', color=c1)
+    ax1.set_xlabel('Num Topics')
+    ax1.set_ylabel('Coherence', color=c1); ax1.tick_params('y', colors=c1)
+
+    # perplexity
+    c2 = 'slategray'
+    ax2 = ax1.twinx()
+    ax2.plot(x, perplexity_vals, 'o-', color=c2)
+    ax2.set_ylabel('Perplexity', color=c2); ax2.tick_params('y', colors=c2)
+
+    # Vis
+    ax1.set_xticks(x)
+    fig.tight_layout()
+
+
+def get_image():
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format="png")
+    image_png = buffer.getvalue()
+    graph = base64.b64encode(image_png)
+    graph = graph.decode("utf-8")
+    buffer.close()
+    return graph
+
+
+def topic_number_consider(request):
+    needs_data_list = Needs.objects.filter(label=1).order_by("-id")[:200]
+    topic_documents = []
+    for needs in needs_data_list:
+        topic_word = topic_words_create(needs.sentence)
+        topic_documents.append(topic_word)
+    print(topic_documents)
+    dictionary = corpora.Dictionary(topic_documents)
+    corpus = [dictionary.doc2bow(doc) for doc in topic_documents]
+
+
+
+    tfidf = models.TfidfModel(corpus)
+    corpus_tfidf = tfidf[corpus]    
+    
+
+    start = 2
+    limit = 22
+    step = 1
+
+    coherence_vals = []
+    perplexity_vals = []
+
+    for n_topic in range(start, limit, step):
+        lda_model = models.ldamodel.LdaModel(corpus=corpus_tfidf, id2word=dictionary, num_topics=n_topic, random_state=0)
+        perplexity_vals.append(np.exp2(-lda_model.log_perplexity(corpus_tfidf)))
+        coherence_model_lda = models.CoherenceModel(model=lda_model, texts=topic_documents, dictionary=dictionary, coherence='c_v')
+        coherence_vals.append(coherence_model_lda.get_coherence())
+
+    create_graph(start, limit, step, perplexity_vals, coherence_vals)
+    graph = get_image()
+    template = loader.get_template("needs/needs_topic_number_consider.html")
+    context = {
+        "graph": graph,
+    }
+    response = HttpResponse(template.render(context, request))
+    return response
