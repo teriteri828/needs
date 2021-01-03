@@ -117,12 +117,17 @@ def topic_words_create(text):
     node = mecab.parseToNode(text)
     topic_word = []
     while node:
-        # 単語を取得
-        word = node.surface
         # 品詞を取得
         pos = node.feature.split(",")[0]
-        if pos in ["名詞"] and not word in stop_words:
-            topic_word.append(word)
+
+        if pos in ["名詞"]:
+            word = node.surface
+            if not word in stop_words:
+                topic_word.append(word)
+        elif pos in ["動詞", "形容詞"]:
+            word = node.feature.split(",")[6]
+            if not word in stop_words:
+                topic_word.append(word)
         # 次の単語に進める
         node = node.next
     return topic_word
