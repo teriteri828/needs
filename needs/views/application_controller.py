@@ -108,7 +108,10 @@ ldaの分類数を調べる用の処理
 
 
 def topic_words_create(text):
-    mecab = MeCab.Tagger("")
+    #最新辞書の追加に関する参考情報
+    #https://qiita.com/SUZUKI_Masaya/items/685000d569452585210c
+    #https://www.saintsouth.net/blog/morphological-analysis-by-mecab-and-mecab-ipadic-neologd-and-python3/
+    mecab = MeCab.Tagger("-d /usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd")
 
     mecab.parse("")  # 文字列がGCされるのを防ぐ
     node = mecab.parseToNode(text)
