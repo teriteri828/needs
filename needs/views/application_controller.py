@@ -2,20 +2,20 @@ from django.http import HttpResponse
 from django.template import loader
 from gensim import corpora, models
 import numpy as np
-
-from needs.models import Needs
-from needs.views.needs_repository import NeedsSelect
-from needs.views.needs_dto import NeedsEntity
 from django.http import QueryDict
 import os
 import csv
 import pandas as pd
 import datetime
-
 import io
 import matplotlib
-
 import MeCab
+import re
+
+from needs.models import Needs
+from needs.views.needs_repository import NeedsSelect
+from needs.views.needs_dto import NeedsEntity
+from needs.views.stop_words import stop_words
 
 # バックエンドを指定
 matplotlib.use("Agg")
@@ -106,6 +106,7 @@ def data_file_save(request):
 ldaの分類数を調べる用の処理
 """
 
+
 def topic_words_create(text):
     mecab = MeCab.Tagger("")
 
@@ -117,7 +118,7 @@ def topic_words_create(text):
         word = node.surface
         # 品詞を取得
         pos = node.feature.split(",")[0]
-        if pos in ["名詞"]:
+        if pos in ["名詞"] and not word in stop_words:
             topic_word.append(word)
         # 次の単語に進める
         node = node.next
@@ -129,19 +130,21 @@ def create_graph(start, limit, step, perplexity_vals, coherence_vals):
     plt.cla()  # グラフをリセット
     x = range(start, limit, step)
 
-    fig, ax1 = plt.subplots(figsize=(12,5))
+    fig, ax1 = plt.subplots(figsize=(12, 5))
 
     # coherence
-    c1 = 'darkturquoise'
-    ax1.plot(x, coherence_vals, 'o-', color=c1)
-    ax1.set_xlabel('Num Topics')
-    ax1.set_ylabel('Coherence', color=c1); ax1.tick_params('y', colors=c1)
+    c1 = "darkturquoise"
+    ax1.plot(x, coherence_vals, "o-", color=c1)
+    ax1.set_xlabel("Num Topics")
+    ax1.set_ylabel("Coherence", color=c1)
+    ax1.tick_params("y", colors=c1)
 
     # perplexity
-    c2 = 'slategray'
+    c2 = "slategray"
     ax2 = ax1.twinx()
-    ax2.plot(x, perplexity_vals, 'o-', color=c2)
-    ax2.set_ylabel('Perplexity', color=c2); ax2.tick_params('y', colors=c2)
+    ax2.plot(x, perplexity_vals, "o-", color=c2)
+    ax2.set_ylabel("Perplexity", color=c2)
+    ax2.tick_params("y", colors=c2)
 
     # Vis
     ax1.set_xticks(x)
@@ -157,22 +160,33 @@ def get_image():
     buffer.close()
     return graph
 
+def format_text(text):
+    '''
+    MeCabに入れる前のツイートの整形方法例
+    '''
+
+    text=re.sub(r'https?://[\w/:%#\$&\?\(\)~\.=\+\-…]+', "", text)
+    text=re.sub('RT', "", text)
+    text=re.sub('お気に入り', "", text)
+    text=re.sub('まとめ', "", text)
+    text=re.sub(r'[!-~]', "", text)#半角記号,数字,英字
+    text=re.sub(r'[︰-＠]', "", text)#全角記号
+    text=re.sub('\n', " ", text)#改行文字
+
+    return text
 
 def topic_number_consider(request):
-    needs_data_list = Needs.objects.filter(label=1).order_by("-id")[:200]
+    needs_data_list = Needs.objects.filter(label=1).order_by("-id")[:5000]
     topic_documents = []
     for needs in needs_data_list:
-        topic_word = topic_words_create(needs.sentence)
+        topic_word = topic_words_create(format_text(needs.sentence))
         topic_documents.append(topic_word)
     print(topic_documents)
     dictionary = corpora.Dictionary(topic_documents)
     corpus = [dictionary.doc2bow(doc) for doc in topic_documents]
 
-
-
     tfidf = models.TfidfModel(corpus)
-    corpus_tfidf = tfidf[corpus]    
-    
+    corpus_tfidf = tfidf[corpus]
 
     start = 2
     limit = 22
@@ -182,9 +196,16 @@ def topic_number_consider(request):
     perplexity_vals = []
 
     for n_topic in range(start, limit, step):
-        lda_model = models.ldamodel.LdaModel(corpus=corpus_tfidf, id2word=dictionary, num_topics=n_topic, random_state=0)
+        lda_model = models.ldamodel.LdaModel(
+            corpus=corpus_tfidf, id2word=dictionary, num_topics=n_topic, random_state=0
+        )
         perplexity_vals.append(np.exp2(-lda_model.log_perplexity(corpus_tfidf)))
-        coherence_model_lda = models.CoherenceModel(model=lda_model, texts=topic_documents, dictionary=dictionary, coherence='c_v')
+        coherence_model_lda = models.CoherenceModel(
+            model=lda_model,
+            texts=topic_documents,
+            dictionary=dictionary,
+            coherence="c_v",
+        )
         coherence_vals.append(coherence_model_lda.get_coherence())
 
     create_graph(start, limit, step, perplexity_vals, coherence_vals)
@@ -194,4 +215,44 @@ def topic_number_consider(request):
         "graph": graph,
     }
     response = HttpResponse(template.render(context, request))
+    return response
+
+def topic_classify(request):
+
+    needs_data_list = Needs.objects.filter(label=1).order_by("-id")[:5000]
+    topic_documents = []
+    for needs in needs_data_list:
+        topic_word = topic_words_create(format_text(needs.sentence))
+        topic_documents.append(topic_word)
+
+    dictionary = corpora.Dictionary(topic_documents)
+    corpus = [dictionary.doc2bow(doc) for doc in topic_documents]
+
+    topic_number = int(request.GET.get("topic_number"))
+
+    tfidf = models.TfidfModel(corpus)
+    corpus_tfidf = tfidf[corpus]
+
+    lda = models.ldamodel.LdaModel(
+        corpus=corpus_tfidf,
+        id2word=dictionary,
+        num_topics=topic_number,
+        alpha="symmetric",
+        random_state=0,
+    )
+    template = loader.get_template("needs/needs_topics.html")
+
+    topics = []
+    for topic_index in range(topic_number):
+        topics.append(
+            [
+                (dictionary[t[0]], t[1])
+                for t in lda.get_topic_terms(topic_index, topn=10)
+            ]
+        )
+    context = {
+        "topics": topics,
+    }
+    response = HttpResponse(template.render(context, request))
+
     return response

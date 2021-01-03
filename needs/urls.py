@@ -9,4 +9,5 @@ urlpatterns = [
     path('learn', application_controller.learn, name='learn'),
     path('data_file_save', application_controller.data_file_save, name='data_file_save'),
     path('topic_number_consider', application_controller.topic_number_consider, name='topic_number_consider'),
+    path('topic_classify', application_controller.topic_classify, name='topic_classify'),
 ]

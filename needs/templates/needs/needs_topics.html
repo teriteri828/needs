@@ -15,16 +15,29 @@
 </head>
  
 <body>
-    <p>Perplexity は低ければ低い程，Coherence は高ければ高い程、良いモデルである</p>
-    <img src="data:image/png;base64, {{ graph | safe }} " alt="">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-    <form action="{% url 'needs:topic_classify' %}" method="get">{% csrf_token %}
-        <input type="submit" value="topic classify">
-        <input type="text" name="topic_number">
-    </form>
-
+    {% for topic_words in topics %}
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">word</th>
+                    <th scope="col">score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for topic_word_score in topic_words %}
+                    <tr> 
+                    {% for topic_info in topic_word_score %}      
+                        <th>{{ topic_info }}</th>
+                    {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+    {% endfor %}
 </body>
  
 </html>
