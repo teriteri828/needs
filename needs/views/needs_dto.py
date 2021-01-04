@@ -8,3 +8,8 @@ class NeedsEntity:
     sentence: str
     date: datetime.datetime
     label: int
+
+
+@dataclass(eq=True, frozen=True)
+class NeedsTopicDocument:
+    sentence: str

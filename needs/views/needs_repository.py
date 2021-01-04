@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from needs.views.needs_dto import NeedsEntity
+from needs.views.needs_dto import NeedsEntity, NeedsTopicDocument
 
 
 @dataclass
@@ -30,6 +30,13 @@ class NeedsSelect:
                     label=needs.label,
                 )
             )
+        return ret
+
+    def topic_data(self, models):
+        needs_data_list = models.objects.filter(label=1).order_by("-id")[:5000]
+        ret = []
+        for needs in needs_data_list:
+            ret.append(NeedsTopicDocument(sentence=needs.sentence,))
         return ret
 
     def learn_data_get(self, models):

@@ -29,13 +29,13 @@ class TestNeedsRepository(TestCase):
             id=1,
             sentence="test",
             date=datetime.datetime(2018, 2, 1, 12, 15, 30, 2000),
-            label=None,
+            label=0,
         )
         td2 = Needs(
             id=2,
             sentence="test2",
             date=datetime.datetime(2020, 2, 1, 12, 15, 30, 2000),
-            label=None,
+            label=1,
         )
         td1.save()
         td2.save()
@@ -47,13 +47,13 @@ class TestNeedsRepository(TestCase):
             nid=1,
             sentence="test",
             date=datetime.datetime(2018, 2, 1, 12, 15, 30, 2000),
-            label=None,
+            label=0,
         )
         ex2 = NeedsEntity(
             nid=2,
             sentence="test2",
             date=datetime.datetime(2020, 2, 1, 12, 15, 30, 2000),
-            label=None,
+            label=1,
         )
         expect = [ex2, ex1]
         self.assertEqual(actual, expect)
@@ -62,20 +62,27 @@ class TestNeedsRepository(TestCase):
         td_list = []
         for i in range(101):
             i = i + 1
-            td = Needs(
-                sentence="test" + str(i),
-                date=datetime.datetime(2018 + i, 2, 1, 12, 15, 30, 2000),
-                label=None,
-            )
-            td.save()
-            td_list.append(
-                NeedsEntity(
-                    nid=i,
+            if i % 2 == 0:
+                td = Needs(
                     sentence="test" + str(i),
                     date=datetime.datetime(2018 + i, 2, 1, 12, 15, 30, 2000),
-                    label=None,
+                    label=1,
                 )
-            )
+                td_list.append(
+                    NeedsEntity(
+                        nid=i,
+                        sentence="test" + str(i),
+                        date=datetime.datetime(2018 + i, 2, 1, 12, 15, 30, 2000),
+                        label=1,
+                    )
+                )
+            else:
+                td = Needs(
+                    sentence="test" + str(i),
+                    date=datetime.datetime(2018 + i, 2, 1, 12, 15, 30, 2000),
+                    label=0,
+                )
+            td.save()
 
         target = NeedsSelect()
         actual = target.top_limit(Needs)
