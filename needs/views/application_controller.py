@@ -66,9 +66,12 @@ def learn(request):
 def top(request):
     needs_select = NeedsSelect()
     needs_list = needs_select.top_limit(Needs)
+    needs_all = needs_select.all(Needs)
     template = loader.get_template("needs/needs_top_limit_table.html")
     context = {
         "needs_list": needs_list,
+        "all_count": len(needs_all),
+        "needs_count": len([needs for needs in needs_all if needs.label == 1]),
     }
     return HttpResponse(template.render(context, request))
 
@@ -115,6 +118,8 @@ def data_file_save(request):
 """
 以下、トピックモデルに関する処理
 """
+
+
 def topic_number_consider(request):
     needs_select = NeedsSelect()
     topic_documents_dictionary_corpus = TopicDocumentsAndDictionaryAndCorpus()

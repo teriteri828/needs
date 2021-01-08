@@ -90,8 +90,8 @@ class TopicDocumentsAndDictionaryAndCorpus:
 
 @dataclass
 class TopicNumberConsiderGraph:
-    start: int = field(default=2)
-    limit: int = field(default=20)
+    start: int = field(default=5)
+    limit: int = field(default=15)
     step: int = field(default=1)
 
     def create(self, documents, dictionary, corpus):
