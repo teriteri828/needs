@@ -18,6 +18,7 @@ class TopicDocumentsAndDictionaryAndCorpus:
     def dictionary_corpus_only_create(self, needs_data_list):
         topic_documents = self._documents_create(needs_data_list)
         dictionary = corpora.Dictionary(topic_documents)
+        dictionary.filter_extremes(no_below=3, no_above=0.8)
         corpus = [dictionary.doc2bow(doc) for doc in topic_documents]
 
         tfidf = models.TfidfModel(corpus)
