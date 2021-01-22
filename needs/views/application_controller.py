@@ -12,6 +12,9 @@ import matplotlib
 import MeCab
 import re
 
+import tensorflow_hub as hub
+import tensorflow_text
+
 from needs.models import Needs
 from needs.views.needs_repository import NeedsSelect
 from needs.views.needs_dto import NeedsEntity
@@ -150,6 +153,33 @@ def topic_classify(request):
     template = loader.get_template("needs/needs_topics.html")
     context = {
         "topics": topics,
+    }
+    response = HttpResponse(template.render(context, request))
+
+    return response
+
+"""
+検索システム
+"""
+embed = hub.load("https://tfhub.dev/google/universal-sentence-encoder-multilingual/3")
+def search(request):
+    search_request = str(request.GET.get("search_request"))
+    needs_select = NeedsSelect()
+    sentences, search_data = needs_select.search_data(Needs)
+    
+
+    search_request_vector = embed(search_request)
+    search_data_vectors = embed(search_data)
+
+    similarities = np.inner(search_request_vector, search_data_vectors)
+    search_result = []
+    for sentence, similarity in zip(sentences,similarities[0]):
+        if similarity > 0.5 and len(sentence) > 15:
+            search_result.append([sentence,similarity]) 
+    template = loader.get_template("needs/needs_search.html")
+    context = {
+        "search_request": search_request,
+        "search_result": search_result,
     }
     response = HttpResponse(template.render(context, request))
 

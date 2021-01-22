@@ -1,0 +1,49 @@
+<!doctype html>
+{% load static %}
+<html lang="ja">
+ 
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+ 
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{% static 'needs/js/learn.js' %}"></script>   
+</head>
+ 
+<body>
+
+    <form action="{% url 'needs:search' %}" method="get">{% csrf_token %}
+        <input type="submit" value="search">
+        <input type="text" name="search_request">
+    </form>
+    {% if search_request %}
+    <p>検索ワード：{{ search_request }}</p>
+    {% endif %}
+    {% if search_result %}
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">sentence</th>
+                <th scope="col">similarity</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for text_similarity in search_result %}
+                <tr>
+                    {% for needs in text_similarity %}
+                        <th>{{ needs }}</th>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        <tbody>
+    </table>
+    {% endif %}
+
+</body>
+ 
+</html>
+

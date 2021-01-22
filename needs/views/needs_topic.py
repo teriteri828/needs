@@ -21,20 +21,21 @@ class TopicDocumentsAndDictionaryAndCorpus:
         dictionary.filter_extremes(no_below=3, no_above=0.8)
         corpus = [dictionary.doc2bow(doc) for doc in topic_documents]
 
-        tfidf = models.TfidfModel(corpus)
-        corpus_tfidf = tfidf[corpus]
+        #tfidf = models.TfidfModel(corpus)
+        #corpus_tfidf = tfidf[corpus]
 
-        return dictionary, corpus_tfidf
+        return dictionary, corpus
 
     def create(self, needs_data_list):
         topic_documents = self._documents_create(needs_data_list)
         dictionary = corpora.Dictionary(topic_documents)
+        dictionary.filter_extremes(no_below=3, no_above=0.8)
         corpus = [dictionary.doc2bow(doc) for doc in topic_documents]
 
-        tfidf = models.TfidfModel(corpus)
-        corpus_tfidf = tfidf[corpus]
+        #tfidf = models.TfidfModel(corpus)
+        #corpus_tfidf = tfidf[corpus]
 
-        return topic_documents, dictionary, corpus_tfidf
+        return topic_documents, dictionary, corpus
 
     def _documents_create(self, needs_data_list):
         topic_documents = []
@@ -80,7 +81,8 @@ class TopicDocumentsAndDictionaryAndCorpus:
                 word = node.surface
                 if not word in stop_words:
                     topic_word.append(word)
-            elif pos in ["動詞", "形容詞"]:
+            #elif pos in ["動詞", "形容詞"]:
+            elif pos in []:
                 word = node.feature.split(",")[6]
                 if not word in stop_words:
                     topic_word.append(word)
