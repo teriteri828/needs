@@ -158,28 +158,45 @@ def topic_classify(request):
 
     return response
 
+
 """
 検索システム
 """
 embed = hub.load("https://tfhub.dev/google/universal-sentence-encoder-multilingual/3")
-def search(request):
+
+
+def search_similarity(request):
     search_request = str(request.GET.get("search_request"))
     needs_select = NeedsSelect()
-    sentences, search_data = needs_select.search_data(Needs)
-    
+    sentences, search_data = needs_select.search_similarity_data(Needs)
 
     search_request_vector = embed(search_request)
     search_data_vectors = embed(search_data)
 
     similarities = np.inner(search_request_vector, search_data_vectors)
     search_result = []
-    for sentence, similarity in zip(sentences,similarities[0]):
+    for sentence, similarity in zip(sentences, similarities[0]):
         if similarity > 0.5 and len(sentence) > 15:
-            search_result.append([sentence,similarity]) 
+            search_result.append([sentence, similarity])
     template = loader.get_template("needs/needs_search.html")
     context = {
         "search_request": search_request,
-        "search_result": search_result,
+        "search_similarity_result": search_result,
+    }
+    response = HttpResponse(template.render(context, request))
+
+    return response
+
+
+def search_contain(request):
+    search_request = str(request.GET.get("search_request"))
+    needs_select = NeedsSelect()
+    search_result = needs_select.search_contain_data(Needs, search_request)
+
+    template = loader.get_template("needs/needs_search.html")
+    context = {
+        "search_request": search_request,
+        "search_contain_result": search_result,
     }
     response = HttpResponse(template.render(context, request))
 

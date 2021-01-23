@@ -37,7 +37,7 @@ class NeedsSelect:
             )
         return ret
 
-    def search_data(self, models):
+    def search_similarity_data(self, models):
         needs_data_list = models.objects.filter(label=1).order_by("-id")[:5000]
         sentence = []
         search_data = []
@@ -45,6 +45,22 @@ class NeedsSelect:
             sentence.append(needs.sentence)
             search_data.append(self._word_extract(needs.sentence))
         return sentence, search_data
+
+    def search_contain_data(self, models, text):
+        needs_data_list = models.objects.filter(
+            label=1, sentence__icontains=text
+        ).order_by("-id")[:5000]
+        ret = []
+        for needs in needs_data_list:
+            ret.append(
+                NeedsEntity(
+                    nid=needs.id,
+                    sentence=needs.sentence,
+                    date=needs.date.replace(tzinfo=None),
+                    label=needs.label,
+                )
+            )
+        return ret
 
     def _format_text(self, text):
         """
@@ -60,6 +76,7 @@ class NeedsSelect:
         text = re.sub("\n", " ", text)  # 改行文字
 
         return text
+
     def _word_extract(self, text):
         # 最新辞書の追加に関する参考情報
         # https://qiita.com/SUZUKI_Masaya/items/685000d569452585210c
@@ -82,7 +99,7 @@ class NeedsSelect:
                 word = node.surface
                 if not word in stop_words:
                     word_list.append(word)
-            #elif pos in ["動詞", "形容詞"]:
+            # elif pos in ["動詞", "形容詞"]:
             # 次の単語に進める
             node = node.next
         ret = " ".join(word_list)

@@ -16,14 +16,18 @@
  
 <body>
 
-    <form action="{% url 'needs:search' %}" method="get">{% csrf_token %}
-        <input type="submit" value="search">
+    <form action="{% url 'needs:search_similarity' %}" method="get">{% csrf_token %}
+        <input type="submit" value="similarity">
+        <input type="text" name="search_request">
+    </form>
+    <form action="{% url 'needs:search_contain' %}" method="get">{% csrf_token %}
+        <input type="submit" value="contain">
         <input type="text" name="search_request">
     </form>
     {% if search_request %}
     <p>検索ワード：{{ search_request }}</p>
     {% endif %}
-    {% if search_result %}
+    {% if search_similarity_result %}
     <table class="table">
         <thead class="thead-dark">
             <tr>
@@ -32,11 +36,35 @@
             </tr>
         </thead>
         <tbody>
-            {% for text_similarity in search_result %}
+            {% for text_similarity in search_similarity_result %}
                 <tr>
                     {% for needs in text_similarity %}
                         <th>{{ needs }}</th>
                     {% endfor %}
+                </tr>
+            {% endfor %}
+        <tbody>
+    </table>
+    {% endif %}
+
+
+    {% if search_contain_result %}
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">sentence</th>
+                <th scope="col">date</th>
+                <th scope="col">lable</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for needs in search_contain_result %}
+                <tr>
+                    <th name="nid">{{ needs.nid }}</th>
+                    <th>{{ needs.sentence }}</th>
+                    <th>{{ needs.date }}</th>
+                    <th>{{ needs.label }}</th>
                 </tr>
             {% endfor %}
         <tbody>

@@ -21,8 +21,8 @@ class TopicDocumentsAndDictionaryAndCorpus:
         dictionary.filter_extremes(no_below=3, no_above=0.8)
         corpus = [dictionary.doc2bow(doc) for doc in topic_documents]
 
-        #tfidf = models.TfidfModel(corpus)
-        #corpus_tfidf = tfidf[corpus]
+        # tfidf = models.TfidfModel(corpus)
+        # corpus_tfidf = tfidf[corpus]
 
         return dictionary, corpus
 
@@ -32,8 +32,8 @@ class TopicDocumentsAndDictionaryAndCorpus:
         dictionary.filter_extremes(no_below=3, no_above=0.8)
         corpus = [dictionary.doc2bow(doc) for doc in topic_documents]
 
-        #tfidf = models.TfidfModel(corpus)
-        #corpus_tfidf = tfidf[corpus]
+        # tfidf = models.TfidfModel(corpus)
+        # corpus_tfidf = tfidf[corpus]
 
         return topic_documents, dictionary, corpus
 
@@ -81,7 +81,7 @@ class TopicDocumentsAndDictionaryAndCorpus:
                 word = node.surface
                 if not word in stop_words:
                     topic_word.append(word)
-            #elif pos in ["動詞", "形容詞"]:
+            # elif pos in ["動詞", "形容詞"]:
             elif pos in []:
                 word = node.feature.split(",")[6]
                 if not word in stop_words:
