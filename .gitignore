@@ -223,3 +223,5 @@ needs_learn/learn_data/learn_data.zip
 needs/views/__pycache__/needs_topic.cpython-37.pyc
 needs/views/__pycache__/service_topic.cpython-37.pyc
 needs/views/__pycache__/stop_words.cpython-37.pyc
+needs_get/__pycache__/needs_get_repository.cpython-37.pyc
+needs_get/__pycache__/needs_get_repository.cpython-37.pyc

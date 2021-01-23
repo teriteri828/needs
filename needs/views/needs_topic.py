@@ -82,7 +82,7 @@ class TopicDocumentsAndDictionaryAndCorpus:
                 if not word in stop_words:
                     topic_word.append(word)
             # elif pos in ["動詞", "形容詞"]:
-            elif pos in []:
+            elif pos in ["形容詞"]:
                 word = node.feature.split(",")[6]
                 if not word in stop_words:
                     topic_word.append(word)
