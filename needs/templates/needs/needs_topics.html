@@ -1,73 +1,29 @@
-<!doctype html>
-{% load static %}
-<html lang="ja">
+{% extends 'needs/base.html' %}
  
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
- 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
- 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="{% static 'needs/js/learn.js' %}"></script>   
-</head>
- 
-<body>
+{% block content %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-
-    
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark mt-3 mb-3">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav4" aria-controls="navbarNav4" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand" href="#">Navbar</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'needs:top' %}">list</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'needs:search_contain' %}">search</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'needs:learn' %}">learn</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'needs:topic_number_consider' %}">topic</a>
-                </li>
-            </ul>
-        </div>
-    </nav>  
-
-
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-
-    {% for topic_words in topics %}
-        <table class="table">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">word</th>
-                    <th scope="col">score</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for topic_word_score in topic_words %}
-                    <tr> 
-                    {% for topic_info in topic_word_score %}      
-                        <th>{{ topic_info }}</th>
-                    {% endfor %}
-                    </tr>
+{% for topic_words in topics %}
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">word</th>
+                <th scope="col">score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for topic_word_score in topic_words %}
+                <tr> 
+                {% for topic_info in topic_word_score %}      
+                    <th>{{ topic_info }}</th>
                 {% endfor %}
-            </tbody>
-        </table>
-        <br>
-    {% endfor %}
-</body>
- 
-</html>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+{% endfor %}
+{% endblock %}
+
 
