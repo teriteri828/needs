@@ -178,7 +178,7 @@ def search_similarity(request):
     for sentence, similarity in zip(sentences, similarities[0]):
         if similarity > 0.5 and len(sentence) > 15:
             search_result.append([sentence, similarity])
-    template = loader.get_template("needs/needs_search.html")
+    template = loader.get_template("needs/needs_search_similarity.html")
     context = {
         "search_request": search_request,
         "search_similarity_result": search_result,
@@ -193,7 +193,7 @@ def search_contain(request):
     needs_select = NeedsSelect()
     search_result = needs_select.search_contain_data(Needs, search_request)
 
-    template = loader.get_template("needs/needs_search.html")
+    template = loader.get_template("needs/needs_search_contain.html")
     context = {
         "search_request": search_request,
         "search_contain_result": search_result,

@@ -1,0 +1,37 @@
+{% extends 'needs/base.html' %}
+
+
+
+
+{% block content %}
+    <form action="{% url 'needs:search_similarity' %}" method="get">{% csrf_token %}
+        <input type="submit" value="similarity">
+        <input type="text" name="search_request">
+    </form>
+
+    {% if search_request %}
+    <p>検索ワード：{{ search_request }}</p>
+    {% endif %}
+    {% if search_similarity_result %}
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">sentence</th>
+                <th scope="col">similarity</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for text_similarity in search_similarity_result %}
+                <tr>
+                    {% for needs in text_similarity %}
+                        <th>{{ needs }}</th>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        <tbody>
+    </table>
+    {% endif %}
+
+{% endblock %}
+
+

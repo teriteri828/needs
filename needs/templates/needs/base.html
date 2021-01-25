@@ -31,8 +31,18 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'needs:top' %}">list</a>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      search
+                    </a>
+                    <div class="dropdown-menu active" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'needs:search_contain' %}">contain</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'needs:search_similarity' %}">similarity</a>
+                    </div>
+                  </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'needs:search_contain' %}">search</a>
+                    
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'needs:learn' %}">learn</a>
