@@ -14,26 +14,42 @@
     
 
     {% if search_contain_result %}
-    <table class="table">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">id</th>
-                <th scope="col">sentence</th>
-                <th scope="col">date</th>
-                <th scope="col">lable</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for needs in search_contain_result %}
+    <form action="{% url 'needs:data_file_save' %}" method="get">{% csrf_token %}
+        <input type="submit" value="learn">
+        <table class="table">
+            <thead class="thead-dark">
                 <tr>
-                    <th name="nid">{{ needs.nid }}</th>
-                    <th>{{ needs.sentence }}</th>
-                    <th>{{ needs.date }}</th>
-                    <th>{{ needs.label }}</th>
+                    <th scope="col">id</th>
+                    <th scope="col">sentence</th>
+                    <th scope="col">date</th>
+                    <th scope="col">lable</th>
                 </tr>
+            </thead>
+            <tbody>
+                {% for needs in search_contain_result %}
+                    <tr>
+                        <th name="nid">{{ needs.nid }}</th>
+                        <th>{{ needs.sentence }}</th>
+                        <th>{{ needs.date }}</th>
+                        <th name="label" >
+                            <div class="dropdown">
+                                <span class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ needs.label }}</span>
+                                <ul class="dropdown-menu" id="1">
+                                    <li><span class="dropdown-item" id="{{ needs.nid }}" value="0">0</span></li>
+                                    <li><span class="dropdown-item" id="{{ needs.nid }}" value="1">1</span></li>
+                                </ul>
+                            </div>
+                        </th>
+                    </tr>
+                {% endfor %}
+                
+            <tbody>
+            {% for needs in search_contain_result %}
+            <input type="hidden" name="h_{{ needs.nid }}" id="h_{{ needs.nid }}" value="{{ needs.label }}">
             {% endfor %}
-        <tbody>
-    </table>
+        </table>
+    </form>
+
     {% endif %}
 {% endblock %}
 
