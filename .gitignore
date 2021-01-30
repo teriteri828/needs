@@ -229,3 +229,4 @@ needs/migrations/0006_auto_20210130_1350.py
 .gitignore
 needs/migrations/__pycache__/0006_auto_20210130_1350.cpython-37.pyc
 needs_get/__pycache__/needs_get_repository.cpython-37.pyc
+needs_get/__pycache__/needs_get_repository.cpython-37.pyc

@@ -7,6 +7,9 @@ $(function(){
         h_nid = "#h_" + $(this).attr('id');
         $(h_nid).val(label.val());
         console.log( $(h_nid).val());
+        console.log("/needs/static/needs");
 
     });
 });
+
+     
