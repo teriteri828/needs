@@ -8,6 +8,8 @@ class NeedsEntity:
     sentence: str
     date: datetime.datetime
     label: int
+    negative: float
+    positive: float
 
 
 @dataclass(eq=True, frozen=True)

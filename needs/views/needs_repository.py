@@ -19,7 +19,8 @@ class NeedsSelect:
                     sentence=needs.sentence,
                     date=needs.date.replace(tzinfo=None),
                     label=needs.label,
-                )
+                    negative=needs.negative,
+                    positive=needs.positive,                )
             )
         return ret
 
@@ -33,7 +34,8 @@ class NeedsSelect:
                     sentence=needs.sentence,
                     date=needs.date.replace(tzinfo=None),
                     label=needs.label,
-                )
+                    negative=needs.negative,
+                    positive=needs.positive,                )
             )
         return ret
 
@@ -58,6 +60,8 @@ class NeedsSelect:
                     sentence=needs.sentence,
                     date=needs.date.replace(tzinfo=None),
                     label=needs.label,
+                    negative=needs.negative,
+                    positive=needs.positive,
                 )
             )
         return ret
@@ -122,6 +126,8 @@ class NeedsSelect:
                     sentence=needs.sentence,
                     date=needs.date.replace(tzinfo=None),
                     label=needs.label,
+                    negative=needs.negative,
+                    positive=needs.positive,
                 )
             )
         return ret

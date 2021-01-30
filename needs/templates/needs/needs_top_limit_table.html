@@ -11,6 +11,8 @@
                         <th scope="col">sentence</th>
                         <th scope="col">date</th>
                         <th scope="col">lable</th>
+                        <th scope="col">negative</th>
+                        <th scope="col">positive</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -20,6 +22,8 @@
                             <th>{{ needs.sentence }}</th>
                             <th>{{ needs.date }}</th>
                             <th>{{ needs.label }}</th>
+                            <th>{{ needs.negative }}</th>
+                            <th>{{ needs.positive }}</th>
                         </tr>
                     {% endfor %}
                 <tbody>

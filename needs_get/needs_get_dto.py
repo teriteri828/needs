@@ -16,3 +16,5 @@ class TweetsDto:
     text: str
     datetime_jst: datetime.datetime
     label: int
+    negative: float
+    positive: float

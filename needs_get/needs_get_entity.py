@@ -21,10 +21,11 @@ import tensorflow_hub as hub
 import tensorflow_text
 import tensorflow as tf
 import numpy as np
+from asari.api import Sonar
 
 model = tf.keras.models.load_model(AI_MODEL_FILE)
 embed = hub.load(USE_URL)
-
+sonar = Sonar()
 
 @dataclass
 class TweetConnect:
@@ -76,10 +77,21 @@ class NeedsTweetGet:
             text_vector = embed(search_tweet_text).numpy()
             needs_bool = np.argmax(model.predict(text_vector), axis=-1)[0]
             print("search_word: {}, sentence: {}".format(TWEET_SEARCH_WORD, search_tweet_text))
+            
+            
+            nega_posi = sonar.ping(text=search_tweet_text)
+            nega_posi = self._asari_unpack(nega_posi)
+
             search_tweet_result.append(
-                TweetsDto(search_tweet_text, search_tweet_datetime, needs_bool)
+                TweetsDto(search_tweet_text, search_tweet_datetime, needs_bool, round(nega_posi["negative"], 2), round(nega_posi["positive"], 2))
             )
         return search_tweet_result
 
     def _remove_emoji(self, src_str):
         return "".join(c for c in src_str if c not in emoji.UNICODE_EMOJI)
+
+    def _asari_unpack(self, asari_result):
+        asari_unpack_result = {}
+        for r in asari_result["classes"]:
+            asari_unpack_result[r["class_name"]] = r["confidence"]
+        return asari_unpack_result

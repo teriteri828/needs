@@ -9,20 +9,11 @@ ACCESS_TOKEN_KEY = const_private.access_token_key
 ACCESS_TOKEN_SECRET = const_private.access_token_secret
 
 TWEET_SEARCH_LIST = [
-    "",
-    "もっと簡単にしてほしい",
-    "もっと分かりやすくしてほしい",
-    "分かりにくい",
-    "面倒くさい　作業",
-    "改善してほしい",
-    "分からない 困る",
-    "疲れる",
-    "時間かかる",
-    "お金出してでも"
+    "浜松市",
 ]
 TWEET_SEARCH = random.choice(TWEET_SEARCH_LIST)
 TWEET_SEARCH_WORD = TWEET_SEARCH + " -filter:retweets"
-TWEET_SEARCH_COUNT = 20
+TWEET_SEARCH_COUNT = 100
 # 前日の00:00:00になる
 TWEET_SINCE_DATE = (datetime.datetime.now() - datetime.timedelta(days=7)).strftime(
     "%Y-%m-%d_00:00:00_JST"
