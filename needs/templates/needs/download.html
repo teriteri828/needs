@@ -1,0 +1,10 @@
+{% extends "needs/base.html" %}
+{% load static %}
+
+{% block content %}
+<h3>ダウンロードするよ</h3>
+<form action="{% url 'needs:download' %}" method="post">
+  {% csrf_token %}
+  <button type="submit" class="btn" name="button">ダウンロード</button>
+</form>
+{% endblock content %}

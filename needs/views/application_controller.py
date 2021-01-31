@@ -253,7 +253,19 @@ def upload(request):
 
 
 def download(request):
-    return request
+    # レスポンスの設定
+    response = HttpResponse(content_type='text/csv')
+    filename = 'data.csv'  # ダウンロードするcsvファイル名
+    response['Content-Disposition'] = 'attachment; filename={}'.format(filename)
+    writer = csv.writer(response)
+    # ヘッダー出力
+    header = ['id','sentence','date', 'needs','negative','positive']
+    writer.writerow(header)
+    # データ出力
+    download_data = Needs.objects.all().order_by("-id")[:5000]# 対象ロケーションの気象データを取得
+    for data in download_data:
+        writer.writerow([data.id, data.sentence, data.date, data.label, data.negative, data.positive])
+    return response 
 
 def _asari_unpack(asari_result):
     asari_unpack_result = {}
