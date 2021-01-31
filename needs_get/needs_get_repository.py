@@ -20,5 +20,9 @@ class DataInsert:
     def execute(self, needs_list: List[TweetsDto]):
         for needs in needs_list:
             n = Needs(sentence=needs.text, date=needs.datetime_jst, label=needs.label, negative=needs.negative, positive=needs.positive)
-            n.save()
+            try:
+                n.save()
+            except django.db.utils.IntegrityError:
+                print("already exit '{}'".format(needs.text))
+                continue
         return True
