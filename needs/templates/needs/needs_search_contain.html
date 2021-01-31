@@ -4,7 +4,7 @@
 
 
 {% block content %}
-    <form action="{% url 'needs:search_contain' %}" method="get">{% csrf_token %}
+    <form action="{{ request.path }}" method="get">{% csrf_token %}
         <input type="submit" value="contain">
         <input type="text" name="search_request">
     </form>
@@ -23,6 +23,8 @@
                     <th scope="col">sentence</th>
                     <th scope="col">date</th>
                     <th scope="col">lable</th>
+                    <th scope="col">negative</th>
+                    <th scope="col">positive</th>
                 </tr>
             </thead>
             <tbody>
@@ -38,8 +40,11 @@
                                     <li><span class="dropdown-item" id="{{ needs.nid }}" value="0">0</span></li>
                                     <li><span class="dropdown-item" id="{{ needs.nid }}" value="1">1</span></li>
                                 </ul>
+
                             </div>
                         </th>
+                        <th>{{ needs.negative }}</th>
+                        <th>{{ needs.positive }}</th>
                     </tr>
                 {% endfor %}
                 

@@ -43,7 +43,9 @@
                       search
                     </a>
                     <div class="dropdown-menu active" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{% url 'needs:search_contain' %}">contain</a>
+                        <a class="dropdown-item" href="{% url 'needs:search_contain' %}">contain all</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'needs:search_contain_only_needs' %}">contain only needs</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'needs:search_similarity' %}">similarity</a>
                     </div>

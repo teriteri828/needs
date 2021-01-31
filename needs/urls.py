@@ -12,6 +12,7 @@ urlpatterns = [
     path('topic_classify', application_controller.topic_classify, name='topic_classify'),
     path('search_similarity', application_controller.search_similarity, name='search_similarity'),
     path('search_contain', application_controller.search_contain, name='search_contain'),
+    path('search_contain_only_needs', application_controller.search_contain_only_needs, name='search_contain_only_needs'),
     path('upload', application_controller.upload, name='upload'),
     path('download', application_controller.download, name='download'),
 ]

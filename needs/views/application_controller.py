@@ -202,6 +202,19 @@ def search_contain(request):
 
     return response
 
+def search_contain_only_needs(request):
+    search_request = str(request.GET.get("search_request"))
+    needs_select = NeedsSelect()
+    search_result = needs_select.search_contain_only_needs_data(Needs, search_request)
+
+    template = loader.get_template("needs/needs_search_contain.html")
+    context = {
+        "search_request": search_request,
+        "search_contain_result": search_result,
+    }
+    response = HttpResponse(template.render(context, request))
+
+    return response
 
 """
 データベースへのインポート、エクスポート

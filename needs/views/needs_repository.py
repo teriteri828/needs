@@ -49,8 +49,26 @@ class NeedsSelect:
             sentence.append(needs.sentence)
             search_data.append(self._word_extract(needs.sentence))
         return sentence, search_data
-
+    
     def search_contain_data(self, models, text):
+        needs_data_list = models.objects.filter(
+            sentence__icontains=text
+        ).order_by("-id")[:5000]
+        ret = []
+        for needs in needs_data_list:
+            ret.append(
+                NeedsEntity(
+                    nid=needs.id,
+                    sentence=needs.sentence,
+                    date=needs.date.replace(tzinfo=None),
+                    label=needs.label,
+                    negative=needs.negative,
+                    positive=needs.positive,
+                )
+            )
+        return ret
+
+    def search_contain_only_needs_data(self, models, text):
         needs_data_list = models.objects.filter(
             label=1, sentence__icontains=text
         ).order_by("-id")[:5000]
