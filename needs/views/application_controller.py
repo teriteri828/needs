@@ -187,6 +187,27 @@ def search_similarity(request):
 
     return response
 
+def search_similarity_only_needs(request):
+    search_request = str(request.GET.get("search_request"))
+    needs_select = NeedsSelect()
+    sentences, search_data = needs_select.search_similarity_only_needs_data(Needs)
+
+    search_request_vector = embed(search_request)
+    search_data_vectors = embed(search_data)
+
+    similarities = np.inner(search_request_vector, search_data_vectors)
+    search_result = []
+    for sentence, similarity in zip(sentences, similarities[0]):
+        if similarity > 0.4 and len(sentence) > 15:
+            search_result.append([sentence, similarity])
+    template = loader.get_template("needs/needs_search_similarity.html")
+    context = {
+        "search_request": search_request,
+        "search_similarity_result": search_result,
+    }
+    response = HttpResponse(template.render(context, request))
+
+    return response
 
 def search_contain(request):
     search_request = str(request.GET.get("search_request"))

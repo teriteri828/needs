@@ -42,7 +42,7 @@ class NeedsSelect:
         return ret
 
     def search_similarity_data(self, models):
-        needs_data_list = models.objects.filter(label=1).order_by("-id")[:5000]
+        needs_data_list = models.objects.all().order_by("-id")[:5000]
         sentence = []
         search_data = []
         for needs in needs_data_list:
@@ -50,6 +50,15 @@ class NeedsSelect:
             search_data.append(self._word_extract(needs.sentence))
         return sentence, search_data
     
+    def search_similarity_only_needs_data(self, models):
+        needs_data_list = models.objects.filter(label=1).order_by("-id")[:5000]
+        sentence = []
+        search_data = []
+        for needs in needs_data_list:
+            sentence.append(needs.sentence)
+            search_data.append(self._word_extract(needs.sentence))
+        return sentence, search_data
+
     def search_contain_data(self, models, text):
         needs_data_list = models.objects.filter(
             sentence__icontains=text

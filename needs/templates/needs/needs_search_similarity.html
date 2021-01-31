@@ -4,7 +4,7 @@
 
 
 {% block content %}
-    <form action="{% url 'needs:search_similarity' %}" method="get">{% csrf_token %}
+    <form action="{{ request.path }}" method="get">{% csrf_token %}
         <input type="submit" value="similarity">
         <input type="text" name="search_request">
     </form>
