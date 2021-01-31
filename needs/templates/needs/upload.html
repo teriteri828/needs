@@ -1,0 +1,19 @@
+{% extends "needs/base.html" %}
+{% load static %}
+{% block extrahead %}
+<script>
+$(function(){
+  $('.dropify').dropify();
+})
+</script>
+{% endblock %}
+
+{% block content %}
+<h3>アップロードするよ</h3>
+<form action="{% url 'needs:upload' %}" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <input type="file" class="dropify" data-default-file="ファイルを選択してください" name="csv">
+  <button type="submit" class="btn" name="button">アップロード</button>
+</form>
+
+{% endblock content %}

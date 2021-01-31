@@ -201,3 +201,62 @@ def search_contain(request):
     response = HttpResponse(template.render(context, request))
 
     return response
+
+
+"""
+データベースへのインポート、エクスポート
+"""
+
+import csv
+from io import TextIOWrapper, StringIO
+from asari.api import Sonar
+sonar = Sonar()
+import tensorflow as tf
+
+AI_MODEL_FILE = os.path.dirname(os.path.abspath(__file__)) + "/../../needs_get/model/get_needs.h5"
+print(AI_MODEL_FILE)
+model = tf.keras.models.load_model(AI_MODEL_FILE)
+
+def upload(request):
+    if "csv" in request.FILES:
+        form_data = TextIOWrapper(request.FILES["csv"].file, encoding="utf-8")
+        csv_file = csv.reader(form_data)
+        for line in csv_file:
+            sentence = line[0]
+            date = line[1]
+            needs_obj = Needs.objects.filter(sentence=sentence)
+            if len(needs_obj) > 0:
+                continue
+
+            #needs label
+            text_vector = embed(sentence).numpy()
+            needs_bool = np.argmax(model.predict(text_vector), axis=-1)[0]
+
+            #nega_posi
+            nega_posi = sonar.ping(text=sentence)
+            nega_posi = _asari_unpack(nega_posi)
+            n = Needs(
+                sentence=sentence,
+                date=date,
+                label=needs_bool,
+                negative=round(nega_posi["negative"], 2),
+                positive=round(nega_posi["positive"], 2),
+            )
+            n.save()
+
+    template = loader.get_template("needs/upload.html")
+    context = {}
+    response = HttpResponse(template.render(context, request))
+
+    return response
+
+
+
+def download(request):
+    return request
+
+def _asari_unpack(asari_result):
+    asari_unpack_result = {}
+    for r in asari_result["classes"]:
+        asari_unpack_result[r["class_name"]] = r["confidence"]
+    return asari_unpack_result

@@ -47,7 +47,7 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'needs:search_similarity' %}">similarity</a>
                     </div>
-                  </li>
+                </li>
                 <li class="nav-item active">
                     
                 </li>
@@ -56,6 +56,17 @@
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'needs:topic_number_consider' %}">topic</a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      file
+                    </a>
+                    <div class="dropdown-menu active" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'needs:upload' %}">upload</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'needs:download' %}">download</a>
+                    </div>
                 </li>
             </ul>
         </div>
