@@ -9,7 +9,8 @@ ACCESS_TOKEN_KEY = const_private.access_token_key
 ACCESS_TOKEN_SECRET = const_private.access_token_secret
 
 TWEET_SEARCH_LIST = [
-    "浜松市",
+    "",
+    "浜松市"
 ]
 TWEET_SEARCH = random.choice(TWEET_SEARCH_LIST)
 TWEET_SEARCH_WORD = TWEET_SEARCH + " -filter:retweets"
@@ -20,6 +21,8 @@ TWEET_SINCE_DATE = (datetime.datetime.now() - datetime.timedelta(days=7)).strfti
 )
 TWEET_UNTIL_DATE = (datetime.datetime.now()).strftime("%Y-%m-%d_%H:%M:%S_JST")
 
+TWEET_GEOCODE_LIST = ["34.6989741,137.7000167,20km"]
+TWEET_GEOCODE = random.choice(TWEET_GEOCODE_LIST)
 # django
 import os
 

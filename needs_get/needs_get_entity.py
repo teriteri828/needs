@@ -15,6 +15,7 @@ from const import (
     TWEET_UNTIL_DATE,
     AI_MODEL_FILE,
     USE_URL,
+    TWEET_GEOCODE,
 )
 
 import tensorflow_hub as hub
@@ -26,6 +27,7 @@ from asari.api import Sonar
 model = tf.keras.models.load_model(AI_MODEL_FILE)
 embed = hub.load(USE_URL)
 sonar = Sonar()
+
 
 @dataclass
 class TweetConnect:
@@ -49,21 +51,35 @@ class NeedsTweetGet:
         search_count = TWEET_SEARCH_COUNT
         since_date = TWEET_SINCE_DATE
         until_date = TWEET_UNTIL_DATE
-        # カーソルを使用してデータ取得
+        geocode = TWEET_GEOCODE
 
-        search_tweets = tweepy.Cursor(
-            twitter_api.search,
-            q=search_word,
-            lang="ja",
-            since=since_date,
-            until=until_date,
-        ).items(search_count)
+        # カーソルを使用してデータ取得
+        if search_word == " -filter:retweets":
+            search_tweets = tweepy.Cursor(
+                twitter_api.search,
+                q=search_word,
+                lang="ja",
+                since=since_date,
+                until=until_date,
+                geocode=geocode,
+            ).items(search_count)
+        else:
+            search_tweets = tweepy.Cursor(
+                twitter_api.search,
+                q=search_word,
+                lang="ja",
+                since=since_date,
+                until=until_date,
+            ).items(search_count)
 
         # tweetの内容を格納するためのリスト変数
         search_tweet_result = []
 
         # 取得したtweetの内容をリストに格納
         for search_tweet in search_tweets:
+            if search_word == " -filter:retweets" and search_tweet.place is None:
+                continue 
+
             if search_tweet.text[0:2] == "RT":
                 continue
             search_tweet_text = search_tweet.text
@@ -76,14 +92,23 @@ class NeedsTweetGet:
             search_tweet_datetime = search_tweet.created_at
             text_vector = embed(search_tweet_text).numpy()
             needs_bool = np.argmax(model.predict(text_vector), axis=-1)[0]
-            print("search_word: {}, sentence: {}".format(TWEET_SEARCH_WORD, search_tweet_text))
-            
-            
+            print(
+                "search_word: {}, sentence: {}".format(
+                    TWEET_SEARCH_WORD, search_tweet_text
+                )
+            )
+
             nega_posi = sonar.ping(text=search_tweet_text)
             nega_posi = self._asari_unpack(nega_posi)
 
             search_tweet_result.append(
-                TweetsDto(search_tweet_text, search_tweet_datetime, needs_bool, round(nega_posi["negative"], 2), round(nega_posi["positive"], 2))
+                TweetsDto(
+                    search_tweet_text,
+                    search_tweet_datetime,
+                    needs_bool,
+                    round(nega_posi["negative"], 2),
+                    round(nega_posi["positive"], 2),
+                )
             )
         return search_tweet_result
 
