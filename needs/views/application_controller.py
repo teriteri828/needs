@@ -170,13 +170,14 @@ def search_similarity(request):
     needs_select = NeedsSelect()
     sentences, search_data = needs_select.search_similarity_data(Needs)
 
-    search_request_vector = embed(search_request)
-    search_data_vectors = embed(search_data)
+    search_request_vector = embed(_word_extract_by_text_list([search_request])[0])
+    search_data_vectors = embed(_word_extract_by_text_list(search_data))
+
 
     similarities = np.inner(search_request_vector, search_data_vectors)
     search_result = []
     for sentence, similarity in zip(sentences, similarities[0]):
-        if similarity > 0.5 and len(sentence) > 15:
+        if similarity > 0.7 and len(sentence) > 15:
             search_result.append([sentence, similarity])
     template = loader.get_template("needs/needs_search_similarity.html")
     context = {
@@ -192,13 +193,13 @@ def search_similarity_only_needs(request):
     needs_select = NeedsSelect()
     sentences, search_data = needs_select.search_similarity_only_needs_data(Needs)
 
-    search_request_vector = embed(search_request)
-    search_data_vectors = embed(search_data)
+    search_request_vector = embed(_word_extract_by_text_list([search_request])[0])
+    search_data_vectors = embed(_word_extract_by_text_list(search_data))
 
     similarities = np.inner(search_request_vector, search_data_vectors)
     search_result = []
     for sentence, similarity in zip(sentences, similarities[0]):
-        if similarity > 0.4 and len(sentence) > 15:
+        if similarity > 0.7 and len(sentence) > 15:
             search_result.append([sentence, similarity])
     template = loader.get_template("needs/needs_search_similarity.html")
     context = {
@@ -208,6 +209,54 @@ def search_similarity_only_needs(request):
     response = HttpResponse(template.render(context, request))
 
     return response
+
+def _format_text(text):
+    """
+    MeCabに入れる前のツイートの整形方法例
+    """
+
+    text = re.sub(r"https?://[\w/:%#\$&\?\(\)~\.=\+\-…]+", "", text)
+    text = re.sub("RT", "", text)
+    text = re.sub("お気に入り", "", text)
+    text = re.sub("まとめ", "", text)
+    text = re.sub(r"[!-~]", "", text)  # 半角記号,数字,英字
+    text = re.sub(r"[︰-＠]", "", text)  # 全角記号
+    text = re.sub("\n", " ", text)  # 改行文字
+
+    return text
+
+def _word_extract_by_text_list(texts):
+    # 最新辞書の追加に関する参考情報
+    # https://qiita.com/SUZUKI_Masaya/items/685000d569452585210c
+    # https://www.saintsouth.net/blog/morphological-analysis-by-mecab-and-mecab-ipadic-neologd-and-python3/
+    ret = []
+    
+    for text in texts:
+        text = _format_text(text)
+
+        mecab = MeCab.Tagger(
+            "-d /usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd"
+        )
+
+        mecab.parse("")  # 文字列がGCされるのを防ぐ
+        node = mecab.parseToNode(text)
+        words_list = []
+        while node:
+            # 品詞を取得
+            pos = node.feature.split(",")[0]
+
+            if pos in ["名詞"]:
+                word = node.surface
+                words_list.append(word)
+            # elif pos in ["動詞", "形容詞"]:
+            elif pos in ["形容詞"]:
+                word = node.feature.split(",")[6]
+                words_list.append(word)
+            # 次の単語に進める
+            node = node.next
+        ret.append(" ".join(words_list))
+    return ret
+
 
 def search_contain(request):
     search_request = str(request.GET.get("search_request"))
