@@ -54,6 +54,7 @@ class NeedsTweetGet:
         geocode = TWEET_GEOCODE
 
         # カーソルを使用してデータ取得
+        """
         if search_word == " -filter:retweets":
             search_tweets = tweepy.Cursor(
                 twitter_api.search,
@@ -64,21 +65,24 @@ class NeedsTweetGet:
                 geocode=geocode,
             ).items(search_count)
         else:
-            search_tweets = tweepy.Cursor(
-                twitter_api.search,
-                q=search_word,
-                lang="ja",
-                since=since_date,
-                until=until_date,
-            ).items(search_count)
+        """
+        search_tweets = tweepy.Cursor(
+            twitter_api.search,
+            q=search_word,
+            lang="ja",
+            since=since_date,
+            until=until_date,
+        ).items(search_count)
 
         # tweetの内容を格納するためのリスト変数
         search_tweet_result = []
 
         # 取得したtweetの内容をリストに格納
         for search_tweet in search_tweets:
+            """
             if search_word == " -filter:retweets" and search_tweet.place is None:
                 continue 
+            """
 
             if search_tweet.text[0:2] == "RT":
                 continue

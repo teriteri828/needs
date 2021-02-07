@@ -10,8 +10,17 @@ ACCESS_TOKEN_SECRET = const_private.access_token_secret
 
 TWEET_SEARCH_LIST = [
     "",
-    "浜松市"
+    "もっと簡単にしてほしい",
+    "もっと分かりやすくしてほしい",
+    "分かりにくい",
+    "面倒くさい　作業",
+    "改善してほしい",
+    "分からない 困る",
+    "疲れる",
+    "時間かかる",
+    "お金出してでも",
 ]
+
 TWEET_SEARCH = random.choice(TWEET_SEARCH_LIST)
 TWEET_SEARCH_WORD = TWEET_SEARCH + " -filter:retweets"
 TWEET_SEARCH_COUNT = 100
