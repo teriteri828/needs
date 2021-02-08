@@ -119,10 +119,12 @@ def data_file_save(request):
 
 
 """
-以下、トピックモデルに関する処理
+分析機能
 """
 
-
+"""
+トピックモデル
+"""
 def topic_number_consider(request):
     needs_select = NeedsSelect()
     topic_documents_dictionary_corpus = TopicDocumentsAndDictionaryAndCorpus()
@@ -160,6 +162,29 @@ def topic_classify(request):
 
 
 """
+単語頻度
+"""
+
+from collections import Counter
+
+def word_count_analysis(request):
+    needs_select = NeedsSelect()
+    word_list = needs_select.word_count_analysis_data(Needs)
+    word_count_list = Counter(word_list).most_common(50)
+    word_list_json = {}
+    for word_count in word_count_list:
+        word_list_json[word_count[0]] = word_count[1]
+
+    template = loader.get_template("needs/word_count.html")
+    context = {
+        "word_count": word_list_json,
+    }
+    response = HttpResponse(template.render(context, request))
+
+    return response
+
+
+"""
 検索システム
 """
 embed = hub.load("https://tfhub.dev/google/universal-sentence-encoder-multilingual/3")
@@ -177,7 +202,7 @@ def search_similarity(request):
     similarities = np.inner(search_request_vector, search_data_vectors)
     search_result = []
     for sentence, similarity in zip(sentences, similarities[0]):
-        if similarity > 0.7 and len(sentence) > 15:
+        if similarity > 0.6 and len(sentence) > 15:
             search_result.append([sentence, similarity])
     template = loader.get_template("needs/needs_search_similarity.html")
     context = {

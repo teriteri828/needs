@@ -58,9 +58,20 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'needs:learn' %}">learn</a>
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'needs:topic_number_consider' %}">topic</a>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      analysis
+                    </a>
+                    <div class="dropdown-menu active" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'needs:topic_number_consider' %}">topic</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'needs:word_count_analysis' %}">word_count</a>
+                    </div>
                 </li>
+
+
+
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -1,0 +1,63 @@
+{% extends 'needs/base.html' %}
+
+{% block content %}
+
+<canvas id="myBarChart"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+
+<script>
+    
+    {% autoescape off %}
+    var word_count = {{ word_count }};
+    {% endautoescape %}
+    console.log(word_count)
+    var labels = [];
+    var data = [];
+    for (let key in word_count) {
+        labels.push(key);
+        data.push(word_count[key]);
+    }
+
+    var ctx = document.getElementById("myBarChart");
+    var myBarChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: '頻度',
+            data: data,
+            backgroundColor: "rgba(219,39,91,0.5)"
+          }
+        ]
+      },
+      options: {
+        title: {
+          display: true,
+          text: '単語頻度グラフ'
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              suggestedMax: Math.max.apply(null, data),
+              suggestedMin: 0,
+              stepSize: Math.max.apply(null, data) / 10,
+              callback: function(value, index, values){
+                return  value +  '回'
+              }
+            }
+          }]
+        },
+      }
+    });
+    </script>
+
+
+<script type="text/javascript">
+
+
+
+</script>
+{% endblock %}
+
+

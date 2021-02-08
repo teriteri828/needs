@@ -47,7 +47,7 @@ class NeedsSelect:
         search_data = []
         for needs in needs_data_list:
             sentence.append(needs.sentence)
-            search_data.append(self._word_extract(needs.sentence))
+            search_data.append(self._word_extract_join(needs.sentence))
         return sentence, search_data
     
     def search_similarity_only_needs_data(self, models):
@@ -56,7 +56,7 @@ class NeedsSelect:
         search_data = []
         for needs in needs_data_list:
             sentence.append(needs.sentence)
-            search_data.append(self._word_extract(needs.sentence))
+            search_data.append(self._word_extract_join(needs.sentence))
         return sentence, search_data
 
     def search_contain_data(self, models, text):
@@ -110,7 +110,42 @@ class NeedsSelect:
 
         return text
 
+    def word_count_analysis_data(self, models):
+        needs_data_list = models.objects.filter(label=1).order_by("-id")[:5000]
+        word_count_list = []
+        for needs in needs_data_list:
+            word_count_list.extend(self._word_extract(needs.sentence))
+        return word_count_list 
+        
     def _word_extract(self, text):
+        # 最新辞書の追加に関する参考情報
+        # https://qiita.com/SUZUKI_Masaya/items/685000d569452585210c
+        # https://www.saintsouth.net/blog/morphological-analysis-by-mecab-and-mecab-ipadic-neologd-and-python3/
+
+        text = self._format_text(text)
+
+        mecab = MeCab.Tagger(
+            "-d /usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd"
+        )
+
+        mecab.parse("")  # 文字列がGCされるのを防ぐ
+        node = mecab.parseToNode(text)
+        word_list = []
+        while node:
+            # 品詞を取得
+            pos = node.feature.split(",")[0]
+
+            if pos in ["名詞"]:
+                word = node.surface
+                if not word in stop_words:
+                    word_list.append(word)
+            # elif pos in ["動詞", "形容詞"]:
+            # 次の単語に進める
+            node = node.next
+        ret = word_list
+        return ret
+        
+    def _word_extract_join(self, text):
         # 最新辞書の追加に関する参考情報
         # https://qiita.com/SUZUKI_Masaya/items/685000d569452585210c
         # https://www.saintsouth.net/blog/morphological-analysis-by-mecab-and-mecab-ipadic-neologd-and-python3/

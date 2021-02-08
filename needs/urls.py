@@ -10,6 +10,7 @@ urlpatterns = [
     path('data_file_save', application_controller.data_file_save, name='data_file_save'),
     path('topic_number_consider', application_controller.topic_number_consider, name='topic_number_consider'),
     path('topic_classify', application_controller.topic_classify, name='topic_classify'),
+    path('word_count_analysis', application_controller.word_count_analysis, name='word_count_analysis'),
     path('search_similarity', application_controller.search_similarity, name='search_similarity'),
     path('search_similarity_only_needs', application_controller.search_similarity_only_needs, name='search_similarity_only_needs'),
     path('search_contain', application_controller.search_contain, name='search_contain'),
