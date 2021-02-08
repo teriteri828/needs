@@ -1,7 +1,7 @@
 {% extends 'needs/base.html' %}
 
 {% block content %}
-<form action="{{ request.path }}" method="get">{% csrf_token %}
+<form ction="{% url 'needs:word_count_analysis' %}" method="get">{% csrf_token %}
   <input type="submit" value="word_count">
   <input type="text" name="conditions_text">
 </form>
