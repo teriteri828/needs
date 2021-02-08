@@ -10,7 +10,7 @@
     {% autoescape off %}
     var word_count = {{ word_count }};
     {% endautoescape %}
-    console.log(word_count)
+
     var labels = [];
     var data = [];
     for (let key in word_count) {
@@ -32,6 +32,12 @@
         ]
       },
       options: {
+        legend: {
+            labels: {
+                // このフォントプロパティ指定は、グローバルプロパティを上書きします
+                fontColor: 'black'
+            }
+        },
         title: {
           display: true,
           text: '単語頻度グラフ'
@@ -46,7 +52,14 @@
                 return  value +  '回'
               }
             }
-          }]
+          }],
+          xAxes: [{                         //x軸設定
+            ticks: {
+                maxRotation: 90,
+                minRoation: 90, 
+                fontSize: 14          //フォントサイズ
+            },
+          }],
         },
       }
     });
