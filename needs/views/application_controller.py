@@ -168,8 +168,10 @@ def topic_classify(request):
 from collections import Counter
 
 def word_count_analysis(request):
+    conditions_text = str(request.GET.get("conditions_text"))
+    print(conditions_text)
     needs_select = NeedsSelect()
-    word_list = needs_select.word_count_analysis_data(Needs)
+    word_list = needs_select.word_count_analysis_data(Needs, conditions_text)
     word_count_list = Counter(word_list).most_common(50)
     word_list_json = {}
     for word_count in word_count_list:

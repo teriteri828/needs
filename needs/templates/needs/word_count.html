@@ -1,6 +1,11 @@
 {% extends 'needs/base.html' %}
 
 {% block content %}
+<form action="{{ request.path }}" method="get">{% csrf_token %}
+  <input type="submit" value="word_count">
+  <input type="text" name="conditions_text">
+</form>
+
 
 <canvas id="myBarChart"></canvas>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>

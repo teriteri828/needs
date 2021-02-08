@@ -110,8 +110,13 @@ class NeedsSelect:
 
         return text
 
-    def word_count_analysis_data(self, models):
-        needs_data_list = models.objects.filter(label=1).order_by("-id")[:5000]
+    def word_count_analysis_data(self, models, text):
+        if text == "" or text is None:
+            needs_data_list = models.objects.filter(label=1).order_by("-id")[:5000]
+        else:
+            needs_data_list = models.objects.filter(
+                sentence__icontains=text
+            ).order_by("-id")[:5000]
         word_count_list = []
         for needs in needs_data_list:
             word_count_list.extend(self._word_extract(needs.sentence))
